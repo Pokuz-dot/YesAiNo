@@ -261,8 +261,8 @@ public partial class MainWindow : Window
             SuggestedFileName = $"{order.OrderNum}.txt",
             FileTypeChoices = new[]
             {
-                new FilePickerFileType("Текстовый документ", new[] { "*.txt" }),
-                new FilePickerFileType("HTML документ", new[] { "*.html" })
+                new FilePickerFileType("Текстовый документ") { Patterns = new[] { "*.txt" } },
+                new FilePickerFileType("HTML документ") { Patterns = new[] { "*.html" } }
             }
         });
         if (file is null) return;
