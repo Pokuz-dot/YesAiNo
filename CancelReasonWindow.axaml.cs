@@ -1,11 +1,11 @@
 using Avalonia.Controls;
 
-namespace Allure.Desktop.Views;
+namespace Avalo;
 
-/// <summary>Модальный диалог ввода причины отмены (минимум 10 символов).</summary>
+/// <summary>Диалог причины отмены (минимум 10 символов).</summary>
 public partial class CancelReasonWindow : Window
 {
-    public string Reason { get; private set; } = string.Empty;
+    public string Reason { get; private set; } = "";
 
     public CancelReasonWindow()
     {
@@ -14,7 +14,7 @@ public partial class CancelReasonWindow : Window
 
     private void OnConfirm(object? sender, RoutedEventArgs e)
     {
-        string reason = ReasonBox.Text?.Trim() ?? string.Empty;
+        string reason = ReasonBox.Text?.Trim() ?? "";
         if (reason.Length < 10)
         {
             ErrorText.Text = "Причина должна содержать не менее 10 символов.";

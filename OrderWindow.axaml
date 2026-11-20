@@ -1,0 +1,81 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Avalo.OrderWindow"
+        Title="Заказ на тренировку"
+        Width="980" Height="680"
+        MinWidth="800" MinHeight="560"
+        WindowStartupLocation="CenterOwner">
+
+    <ScrollViewer>
+        <StackPanel Spacing="12" Margin="22">
+            <TextBlock Text="Заказ на тренировку (Master-Detail)" FontSize="24" FontWeight="Bold"
+                       Foreground="#3E2723"/>
+
+            <Grid ColumnDefinitions="Auto,*,Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер:" VerticalAlignment="Center" Foreground="#3E2723"/>
+                <TextBox x:Name="TxtNum" Grid.Row="0" Grid.Column="1" IsReadOnly="True"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Дата:" VerticalAlignment="Center" Foreground="#3E2723"/>
+                <TextBox x:Name="TxtDate" Grid.Row="0" Grid.Column="3" IsReadOnly="True"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Всадник:" VerticalAlignment="Center" Foreground="#3E2723"/>
+                <ComboBox x:Name="CmbRider" Grid.Row="1" Grid.Column="1">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding FullName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Статус:" VerticalAlignment="Center" Foreground="#3E2723"/>
+                <TextBlock x:Name="TxtStatus" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center"
+                           FontWeight="Bold" Foreground="#3E2723"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Итого:" VerticalAlignment="Center" Foreground="#3E2723"/>
+                <TextBlock x:Name="TxtTotal" Grid.Row="2" Grid.Column="1" FontSize="18" FontWeight="Bold"
+                           Foreground="#3E2723" VerticalAlignment="Center"/>
+            </Grid>
+
+            <TextBlock x:Name="ErrorText" Foreground="#C62828" TextWrapping="Wrap"/>
+
+            <TextBlock Text="Позиции заказа" FontSize="18" FontWeight="Bold" Foreground="#3E2723"/>
+            <DataGrid x:Name="ItemsGrid" AutoGenerateColumns="False" Height="200" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Лошадь" Binding="{Binding HorseName}" Width="150"/>
+                    <DataGridTextColumn Header="Дата и время" Binding="{Binding SessionText}" Width="160"/>
+                    <DataGridTextColumn Header="Минут" Binding="{Binding DurationMinutes}" Width="80"/>
+                    <DataGridTextColumn Header="Тренер" Binding="{Binding TrainerText}" Width="80"/>
+                    <DataGridTextColumn Header="Сумма, руб." Binding="{Binding CostText}" Width="120"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="8">
+                <ComboBox x:Name="CmbHorse" Grid.Column="0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Nickname}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <DatePicker x:Name="DatePicker" Grid.Column="1"/>
+                <TimePicker x:Name="TimePicker" Grid.Column="2"/>
+                <TextBox x:Name="TxtMinutes" Grid.Column="3" PlaceholderText="Минут" Width="90" Text="45"/>
+                <CheckBox x:Name="ChkTrainer" Grid.Column="4" Content="Тренер" VerticalAlignment="Center"/>
+                <Button x:Name="BtnAddItem" Grid.Column="5" Content="+ Позиция"/>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button x:Name="BtnRemoveItem" Content="Удалить позицию"/>
+                <Button x:Name="BtnSave" Content="Сохранить"/>
+            </StackPanel>
+
+            <TextBlock Text="Смена статуса (FSM)" FontSize="18" FontWeight="Bold" Foreground="#3E2723"/>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Лошадь оседлана" Click="OnStatusSaddled"/>
+                <Button Content="Тренировка в манеже" Click="OnStatusTraining"/>
+                <Button Content="Завершена успешно" Click="OnStatusCompleted"/>
+                <Button Content="Отмена по ветпоказаниям" Click="OnStatusCancelled"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

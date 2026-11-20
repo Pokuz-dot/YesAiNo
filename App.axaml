@@ -1,6 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="Allure.Desktop.App"
+             x:Class="Avalo.App"
              RequestedThemeVariant="Light">
 
     <Application.Styles>
@@ -37,13 +37,11 @@
             <Setter Property="Padding" Value="14,0"/>
         </Style>
 
-        <!-- Наведение на кнопку -->
         <Style Selector="Button:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="#F57C00"/>
             <Setter Property="TextBlock.Foreground" Value="White"/>
         </Style>
 
-        <!-- Отключённая кнопка -->
         <Style Selector="Button:disabled /template/ ContentPresenter">
             <Setter Property="Background" Value="#BCAAA4"/>
             <Setter Property="TextBlock.Foreground" Value="White"/>
@@ -121,16 +119,6 @@
             <Setter Property="Foreground" Value="#3E2723"/>
         </Style>
 
-        <!-- Цветовая индикация статуса строки (StatusBrush из ViewModel) -->
-        <Style Selector="DataGridRow">
-            <Setter Property="Background" Value="{Binding StatusBrush}"/>
-        </Style>
-
-        <Style Selector="DataGridRow:selected">
-            <Setter Property="Background" Value="#FFE0B2"/>
-        </Style>
-
-        <!-- ComboBox и CheckBox -->
         <Style Selector="ComboBox">
             <Setter Property="Background" Value="White"/>
             <Setter Property="Foreground" Value="#3E2723"/>
@@ -139,7 +127,6 @@
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="Height" Value="42"/>
             <Setter Property="FontSize" Value="15"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
 
         <Style Selector="CheckBox">

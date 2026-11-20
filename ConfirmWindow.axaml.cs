@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 
-namespace Allure.Desktop.Views;
+namespace Avalo;
 
-/// <summary>Модальный диалог подтверждения удаления.</summary>
+/// <summary>Диалог подтверждения удаления.</summary>
 public partial class ConfirmWindow : Window
 {
     public ConfirmWindow()

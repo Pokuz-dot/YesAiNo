@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        x:Class="Allure.Desktop.Views.ConfirmWindow"
+        x:Class="Avalo.ConfirmWindow"
         Title="Подтверждение"
         Width="420" Height="200"
         WindowStartupLocation="CenterOwner"
