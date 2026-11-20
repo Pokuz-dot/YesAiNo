@@ -1,0 +1,20 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Allure.Desktop.Views.CancelReasonWindow"
+        Title="Причина отмены"
+        Width="460" Height="280"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False">
+
+    <StackPanel Spacing="12" Margin="20">
+        <TextBlock Text="Укажите причину отмены заказа (не менее 10 символов)"
+                   FontWeight="Bold" Foreground="#3E2723" TextWrapping="Wrap"/>
+        <TextBox x:Name="ReasonBox" TextWrapping="Wrap" Height="90"
+                 PlaceholderText="Например: лошадь заболела, требуется ветеринарный осмотр"/>
+        <TextBlock x:Name="ErrorText" Foreground="#C62828" TextWrapping="Wrap"/>
+        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+            <Button Content="Отмена" Click="OnCancel"/>
+            <Button Content="Подтвердить" Click="OnConfirm"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

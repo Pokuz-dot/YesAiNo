@@ -1,0 +1,100 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:conv="using:Allure.Desktop.Converters"
+        x:Class="Allure.Desktop.Views.OrderWindow"
+        Title="Заказ на тренировку"
+        Width="980" Height="680"
+        MinWidth="800" MinHeight="560"
+        WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <conv:StatusToBrushConverter x:Key="StatusBrush"/>
+    </Window.Resources>
+
+    <ScrollViewer>
+        <StackPanel Spacing="12" Margin="22">
+            <TextBlock Text="Заказ на тренировку (Master-Detail)" FontSize="24" FontWeight="Bold"
+                       Foreground="#3E2723"/>
+
+            <!-- Заголовок заказа -->
+            <Grid ColumnDefinitions="Auto,*,Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер:" VerticalAlignment="Center" Foreground="#3E2723"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding OrderNum}" IsReadOnly="True"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Дата:" VerticalAlignment="Center" Foreground="#3E2723"/>
+                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding OrderDate}" IsReadOnly="True"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Всадник:" VerticalAlignment="Center" Foreground="#3E2723"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Riders}"
+                          SelectedValue="{Binding RiderId}" SelectedValuePath="Id"
+                          IsEnabled="{Binding IsEditable}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding FullName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Статус:" VerticalAlignment="Center" Foreground="#3E2723"/>
+                <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding Status}" VerticalAlignment="Center"
+                           FontWeight="Bold" Foreground="{Binding Status, Converter={StaticResource StatusBrush}}"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Итого:" VerticalAlignment="Center" Foreground="#3E2723"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TotalPrice}" FontSize="18" FontWeight="Bold"
+                           Foreground="#3E2723" VerticalAlignment="Center"/>
+            </Grid>
+
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="#C62828" TextWrapping="Wrap"/>
+
+            <!-- Спецификация -->
+            <TextBlock Text="Позиции заказа" FontSize="18" FontWeight="Bold" Foreground="#3E2723"/>
+            <DataGrid ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"
+                      AutoGenerateColumns="False" Height="200" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Лошадь" Binding="{Binding HorseName}" Width="150"/>
+                    <DataGridTextColumn Header="Дата и время" Binding="{Binding SessionText}" Width="160"/>
+                    <DataGridTextColumn Header="Минут" Binding="{Binding DurationMinutes}" Width="80"/>
+                    <DataGridTextColumn Header="Тренер" Binding="{Binding HasTrainer}" Width="80"/>
+                    <DataGridTextColumn Header="Сумма, руб." Binding="{Binding CostText}" Width="120"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- Добавление позиции -->
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="8">
+                <ComboBox x:Name="HorsePicker" Grid.Column="0" ItemsSource="{Binding Horses}"
+                          SelectedValuePath="Id" IsEnabled="{Binding IsEditable}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Nickname}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <DatePicker x:Name="DatePicker" Grid.Column="1" IsEnabled="{Binding IsEditable}"/>
+                <TimePicker x:Name="TimePicker" Grid.Column="2" IsEnabled="{Binding IsEditable}"/>
+                <TextBox x:Name="DurationBox" Grid.Column="3" PlaceholderText="Минут" Width="90"
+                         Text="45" IsEnabled="{Binding IsEditable}"/>
+                <CheckBox x:Name="TrainerBox" Grid.Column="4" Content="Тренер" VerticalAlignment="Center"
+                          IsEnabled="{Binding IsEditable}"/>
+                <Button Grid.Column="5" Content="+ Позиция" Click="OnAddItemClicked"/>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Удалить позицию" Command="{Binding RemoveItemCommand}"/>
+                <Button Content="Сохранить" Command="{Binding SaveCommand}"/>
+            </StackPanel>
+
+            <!-- Переходы FSM -->
+            <TextBlock Text="Смена статуса (FSM)" FontSize="18" FontWeight="Bold" Foreground="#3E2723"/>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Лошадь оседлана" Command="{Binding ChangeStatusCommand}"
+                        CommandParameter="Лошадь оседлана"/>
+                <Button Content="Тренировка в манеже" Command="{Binding ChangeStatusCommand}"
+                        CommandParameter="Тренировка в манеже"/>
+                <Button Content="Завершена успешно" Command="{Binding ChangeStatusCommand}"
+                        CommandParameter="Завершена успешно"/>
+                <Button Content="Отмена по ветпоказаниям" Command="{Binding ChangeStatusCommand}"
+                        CommandParameter="Отмена по ветпоказаниям"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

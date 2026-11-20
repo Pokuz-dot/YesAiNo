@@ -1,0 +1,146 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Allure.Desktop.Views.MainWindow"
+        Title="Аллюр — Конноспортивный клуб и ипподром"
+        Width="1220" Height="820"
+        MinWidth="920" MinHeight="620"
+        WindowStartupLocation="CenterScreen">
+
+    <DockPanel>
+        <!-- Верхняя панель: переключатель Клуб / Ипподром, пользователь, таймер -->
+        <Border x:Name="TopPanel" DockPanel.Dock="Top"
+                Background="#F5F5F5" BorderBrush="Black" BorderThickness="0,0,0,2" Padding="10">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="16">
+                <Border Classes="toggle-container">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Button x:Name="BtnClub" Classes="toggle-btn active" Content="Клуб Аллюр"
+                                Command="{Binding ShowClubCommand}"/>
+                        <Button x:Name="BtnHippodrome" Classes="toggle-btn" Content="Ипподром"
+                                Command="{Binding ShowHippodromeCommand}"/>
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding CurrentUserText}" FontWeight="Bold" Foreground="#3E2723"/>
+                    <TextBlock Text="{Binding CurrentUserRole}" FontSize="12" Foreground="#8D6E63"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding TimerText}" FontSize="20" FontWeight="Bold"
+                               Foreground="#3E2723" VerticalAlignment="Center" MinWidth="150"/>
+                    <Button Content="Старт" Command="{Binding StartTimerCommand}" Width="70"/>
+                    <Button Content="Пауза" Command="{Binding PauseTimerCommand}" Width="70"/>
+                    <Button Content="Сброс" Command="{Binding ResetTimerCommand}" Width="70"/>
+                </StackPanel>
+
+                <Button Grid.Column="3" Content="Выйти" Command="{Binding LogoutCommand}"
+                        VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <Grid>
+            <!-- ===================== ЧАСТЬ 1: КЛУБ ===================== -->
+            <ScrollViewer x:Name="ClubPanel" IsVisible="{Binding IsClubMode}">
+                <StackPanel Spacing="14" Margin="25">
+                    <TextBlock Text="Конноспортивный клуб «Аллюр»" FontSize="32" FontWeight="Bold"
+                               Foreground="#3E2723" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Text="Мир верховой езды и гармонии с лошадьми" FontSize="16"
+                               FontStyle="Italic" Foreground="#8D6E63"
+                               HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <Border Height="2" Background="#8D6E63"/>
+
+                    <TextBlock Text="О клубе" FontSize="20" FontWeight="Bold" Foreground="#3E2723"/>
+                    <TextBlock Text="Учёт постоя спортивных лошадей в денниках, расписание тренировок по конкуру и аренда манежа. Стоимость занятия: (минут / 45) × 1500 руб., услуги тренера +1000 руб., скидка всадника — по discount_rate. Лошадь — не более 3 часов тренировок в сутки."
+                               TextWrapping="Wrap" Foreground="#3E2723"/>
+
+                    <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="8">
+                        <TextBox Grid.Column="0" PlaceholderText="Поиск по номеру или всаднику..."
+                                 Text="{Binding SearchText}"/>
+                        <ComboBox Grid.Column="1" ItemsSource="{Binding Statuses}"
+                                  SelectedItem="{Binding StatusFilter}" Width="220"/>
+                        <Button Grid.Column="2" Content="Обновить" Command="{Binding RefreshCommand}"/>
+                        <Button Grid.Column="3" Content="+ Новый заказ" Command="{Binding NewOrderCommand}"/>
+                    </Grid>
+
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="#C62828" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Заказы на тренировки" FontSize="20" FontWeight="Bold" Foreground="#3E2723"/>
+                    <DataGrid x:Name="OrdersGrid" ItemsSource="{Binding Orders}"
+                              SelectedItem="{Binding SelectedOrder}"
+                              AutoGenerateColumns="False" CanUserSortColumns="True"
+                              Height="230" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Номер" Binding="{Binding OrderNum}" Width="160"/>
+                            <DataGridTextColumn Header="Дата" Binding="{Binding OrderDateText}" Width="150"/>
+                            <DataGridTextColumn Header="Всадник" Binding="{Binding RiderName}" Width="*"/>
+                            <DataGridTextColumn Header="Сумма, руб." Binding="{Binding TotalPriceText}" Width="110"/>
+                            <DataGridTextColumn Header="Статус" Binding="{Binding Status}" Width="200"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="Открыть" Command="{Binding OpenOrderCommand}"/>
+                        <Button Content="Экспорт (SHA256)" Command="{Binding ExportOrderCommand}"/>
+                        <Button Content="Удалить" Command="{Binding DeleteOrderCommand}"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Наши лошади" FontSize="20" FontWeight="Bold" Foreground="#3E2723"/>
+                    <DataGrid ItemsSource="{Binding Horses}" AutoGenerateColumns="False"
+                              Height="180" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Кличка" Binding="{Binding Nickname}" Width="140"/>
+                            <DataGridTextColumn Header="Порода" Binding="{Binding BreedName}" Width="*"/>
+                            <DataGridTextColumn Header="Год рождения" Binding="{Binding BirthYear}" Width="120"/>
+                            <DataGridTextColumn Header="Окрас" Binding="{Binding SuitColor}" Width="140"/>
+                            <DataGridTextColumn Header="Допуск к тренировкам" Binding="{Binding ReadyText}" Width="170"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBlock Text="Всадники клуба" FontSize="20" FontWeight="Bold" Foreground="#3E2723"/>
+                    <DataGrid ItemsSource="{Binding Riders}" AutoGenerateColumns="False"
+                              Height="180" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="*"/>
+                            <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="170"/>
+                            <DataGridTextColumn Header="Уровень" Binding="{Binding SkillLevel}" Width="150"/>
+                            <DataGridTextColumn Header="Скидка" Binding="{Binding DiscountText}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ===================== ЧАСТЬ 2: ИППОДРОМ ===================== -->
+            <ScrollViewer x:Name="HippodromePanel" IsVisible="{Binding IsHippodromeMode}">
+                <StackPanel Spacing="14" Margin="25">
+                    <Border Background="#2E4A3B" CornerRadius="10" Padding="22">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="Ипподром «Аллюр»" FontSize="32" FontWeight="Bold"
+                                       Foreground="#F5E6C8" HorizontalAlignment="Center" TextAlignment="Center"/>
+                            <TextBlock Text="Скачки, конкур и расписание манежа" FontSize="16"
+                                       FontStyle="Italic" Foreground="#C8B88A"
+                                       HorizontalAlignment="Center" TextAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="{Binding HippodromeStats}" TextWrapping="Wrap" Foreground="#3E2723"/>
+
+                    <TextBlock Text="Расписание занятий" FontSize="20" FontWeight="Bold" Foreground="#2E4A3B"/>
+                    <DataGrid ItemsSource="{Binding Schedule}" AutoGenerateColumns="False"
+                              Height="320" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Заказ" Binding="{Binding OrderNum}" Width="160"/>
+                            <DataGridTextColumn Header="Дата и время" Binding="{Binding SessionText}" Width="160"/>
+                            <DataGridTextColumn Header="Лошадь" Binding="{Binding HorseName}" Width="140"/>
+                            <DataGridTextColumn Header="Всадник" Binding="{Binding RiderName}" Width="*"/>
+                            <DataGridTextColumn Header="Минут" Binding="{Binding DurationMinutes}" Width="80"/>
+                            <DataGridTextColumn Header="Тренер" Binding="{Binding TrainerText}" Width="80"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBlock Text="Таймер академического часа верховой езды (45 минут) находится в верхней панели: по истечении смены подаётся звуковой сигнал."
+                               TextWrapping="Wrap" Foreground="#5D4037"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Window>
