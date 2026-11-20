@@ -40,7 +40,6 @@ public partial class OrderWindow : Window
         if (_riders.Count > 0) CmbRider.SelectedIndex = 0;
         if (_horses.Count > 0) CmbHorse.SelectedIndex = 0;
         DatePicker.SelectedDate = DateTime.Today;
-        TimePicker.Clock = new TimeSpan(10, 0, 0);
 
         RefreshHeader();
         RefreshItems();
@@ -112,7 +111,11 @@ public partial class OrderWindow : Window
         }
 
         DateTime date = DatePicker.SelectedDate?.Date ?? DateTime.Today;
-        TimeSpan time = TimePicker.Clock ?? new TimeSpan(10, 0, 0);
+        if (!TimeSpan.TryParse(TxtTime.Text, out TimeSpan time))
+        {
+            ErrorText.Text = "Время укажите в формате ЧЧ:ММ (например, 10:00).";
+            return;
+        }
         _order.Items.Add(new OrderItem
         {
             HorseId = horse.Id,

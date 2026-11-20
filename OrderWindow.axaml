@@ -58,7 +58,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <DatePicker x:Name="DatePicker" Grid.Column="1"/>
-                <TimePicker x:Name="TimePicker" Grid.Column="2"/>
+                <TextBox x:Name="TxtTime" Grid.Column="2" Text="10:00" Width="90" PlaceholderText="ЧЧ:ММ"/>
                 <TextBox x:Name="TxtMinutes" Grid.Column="3" PlaceholderText="Минут" Width="90" Text="45"/>
                 <CheckBox x:Name="ChkTrainer" Grid.Column="4" Content="Тренер" VerticalAlignment="Center"/>
                 <Button x:Name="BtnAddItem" Grid.Column="5" Content="+ Позиция"/>

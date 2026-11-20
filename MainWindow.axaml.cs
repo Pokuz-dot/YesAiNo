@@ -251,18 +251,21 @@ public partial class MainWindow : Window
         Order? order = SelectedOrder();
         if (order is null) return;
 
-        var dialog = new SaveFileDialog
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is null) return;
+
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
             Title = "Экспорт маршрутного листа",
             SuggestedFileName = $"{order.OrderNum}.txt",
             FileTypeChoices = new[]
             {
-                new FileDialogFilter { Name = "Текстовый документ", Extensions = new[] { "txt" } },
-                new FileDialogFilter { Name = "HTML документ", Extensions = new[] { "html" } }
+                new FilePickerFileType("Текстовый документ", new[] { "*.txt" }),
+                new FilePickerFileType("HTML документ", new[] { "*.html" })
             }
-        };
-        string? path = await dialog.Show(this);
-        if (string.IsNullOrWhiteSpace(path)) return;
+        });
+        if (file is null) return;
+        string path = file.Path.LocalPath;
 
         string instructor = _currentUser?.FullName ?? "Инструктор";
         string content = path.EndsWith(".html", StringComparison.OrdinalIgnoreCase)
